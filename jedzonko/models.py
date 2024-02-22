@@ -11,3 +11,7 @@ class Recipe(models.Model):
     updated = models.DateTimeField(auto_now=True)
     preparation_time = models.TimeField()
     votes = models.IntegerField(default=0)
+
+
+class Plan(models.Model):
+    id = models.AutoField(primary_key=True)
