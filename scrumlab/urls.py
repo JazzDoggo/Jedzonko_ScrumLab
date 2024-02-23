@@ -15,10 +15,26 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.http import HttpResponse
+from jedzonko.views import *
 
-from jedzonko.views import IndexView
+
+#### DO SPRAWDZANIA LINKOW
+def empty(request, id=0):
+    return HttpResponse('Empty page')
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('index/', IndexView.as_view()),
+    path('', IndexView.as_view(), name='main-page'),
+    path('main/', DashBoard.as_view(), name='dashboard'),
+    path('recipe/<id>/', empty, ),
+    path('recipe/list/', empty, name='recipe-list'),
+    path('recipe/add/', empty, name='recipe-add'),
+    path('recipe/modify/<id>/', empty, ),
+    path('plan/<id>/', empty, ),
+    path('plan/list/', empty, name='plan-list'),
+    path('plan/add/', empty, name='plan-add'),
+    path('plan/add-recipe/', empty, name='plan-add-recipe'),
+
 ]
