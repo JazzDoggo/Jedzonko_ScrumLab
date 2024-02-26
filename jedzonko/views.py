@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.views import View
 
-from jedzonko.models import Recipe, Plan
+from jedzonko.models import Recipe, Plan, RecipePlan
 
 
 class IndexView(View):
@@ -17,11 +17,30 @@ class IndexView(View):
 
 
 class DashBoard(View):
-
     def get(self, request):
         no_of_recipes = Recipe.objects.all().count()
         no_of_plans = Plan.objects.all().count()
-        return render(request, "dashboard.html", {"recipes": no_of_recipes, "plans": no_of_plans})
+        plans_by_created = Plan.objects.all().order_by('-created')
+        newest_recipe_plan_meal = None
+        if no_of_plans > 0:
+            newest_plan = plans_by_created[0]
+            newest_recipe_plan = RecipePlan.objects.filter(plan=newest_plan)
+            newest_recipe_plan_days = newest_recipe_plan.day_name.all()
+            newest_recipe_plan_recipes = newest_recipe_plan.recipes.all()
+            newest_recipe_plan_meal = newest_recipe_plan.meals.all()
+            return render(request, "dashboard.html", {
+                "recipes": no_of_recipes,
+                "plans": no_of_plans,
+                "newest_recipe_plan_meal": newest_recipe_plan_meal,
+                "newest_recipe_plan_days": newest_recipe_plan_days,
+                "newest_recipe_plan_recipes": newest_recipe_plan_recipes})
+        return render(request, "dashboard.html", {
+            "recipes": no_of_recipes,
+            "plans": no_of_plans,
+            "newest_recipe_plan_meal": newest_recipe_plan_meal
+        })
+
+
 
 
 
