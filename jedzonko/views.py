@@ -3,9 +3,8 @@ from datetime import datetime
 from django.core import paginator
 from django.core.paginator import Paginator
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import View
-
 from jedzonko.models import Recipe, Plan
 
 
@@ -24,7 +23,6 @@ class DashBoard(View):
         return render(request, "dashboard.html", {"recipes": no_of_recipes, "plans": no_of_plans})
 
 
-
 class RecipesView(View):
     def get(self, request):
         recipes = Recipe.objects.all().order_by('-votes', '-created')
@@ -33,7 +31,15 @@ class RecipesView(View):
         recipes_in_pages = paginator.get_page(page_number)
         return render(request, "app-recipes.html", {"recipes": recipes_in_pages})
 
-      
+
 class RecipeDetailView(View):
     def get(self, request, id):
         return HttpResponse('RECIPE DETAILS ' + id)
+
+
+class PlanAddView(View):
+    def get(self, request):
+        return render(request, "app-add-schedules.html")
+
+    def post(self, request):
+        return render(request, "app-add-schedules.html")

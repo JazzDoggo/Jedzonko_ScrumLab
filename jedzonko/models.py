@@ -13,7 +13,6 @@ class Recipe(models.Model):
     votes = models.IntegerField(default=0)
 
 
-
 class Plan(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=128)
@@ -35,4 +34,3 @@ class RecipePlan(models.Model):
     plan = models.ForeignKey(Plan, on_delete=models.CASCADE)
     order = models.IntegerField(unique=True)
     day_name = models.ForeignKey(DayName, on_delete=models.CASCADE)
-
