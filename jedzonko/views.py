@@ -1,18 +1,26 @@
 from datetime import datetime
+from random import shuffle
 
 from django.core import paginator
 from django.core.paginator import Paginator
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views import View
+from jedzonko.models import Recipe
 from django.contrib import messages
+
 
 from jedzonko.models import Recipe, Plan, RecipePlan
 
 
 class IndexView(View):
     def get(self, request):
-        ctx = {"actual_date": datetime.now()}
+        recipes = list(Recipe.objects.all())
+        shuffle(recipes)
+        recipes = recipes[:3]
+
+        ctx = {"actual_date": datetime.now(),
+               "recipes": recipes}
         return render(request, "index.html", ctx)
 
 
