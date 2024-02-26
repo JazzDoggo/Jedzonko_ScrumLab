@@ -29,7 +29,7 @@ class DashBoard(View):
             newest_recipe_plan_recipes = newest_recipe_plan.recipes.all()
             newest_recipe_plan_meal = newest_recipe_plan.meals.all()
             return render(request, "dashboard.html", {
-                "recipes": no_of_recipes,
+                "recipes": no_of_recipes ,
                 "plans": no_of_plans,
                 "newest_recipe_plan_meal": newest_recipe_plan_meal,
                 "newest_recipe_plan_days": newest_recipe_plan_days,
