@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.views import View
 
-from jedzonko.models import Recipe
+from jedzonko.models import Recipe, Plan
 
 
 class IndexView(View):
@@ -20,7 +20,9 @@ class DashBoard(View):
 
     def get(self, request):
         no_of_recipes = Recipe.objects.all().count()
-        return render(request, "dashboard.html", {"recipes": no_of_recipes})
+        no_of_plans = Plan.objects.all().count()
+        return render(request, "dashboard.html", {"recipes": no_of_recipes, "plans": no_of_plans})
+
 
 
 class RecipesView(View):
@@ -31,6 +33,7 @@ class RecipesView(View):
         recipes_in_pages = paginator.get_page(page_number)
         return render(request, "app-recipes.html", {"recipes": recipes_in_pages})
 
+      
 class RecipeDetailView(View):
     def get(self, request, id):
         return HttpResponse('RECIPE DETAILS ' + id)
