@@ -3,7 +3,18 @@
 {% block title %}Nowy przepis{% endblock %}
 
 {% block content %}
+    <form method="post">
+    {% csrf_token %}
 <div class="dashboard-content border-dashed p-3 m-4 view-height">
+    {% if messages %}
+        <div class="alert alert-danger" role="alert">
+        {% for message in messages %}
+            <span>
+                    {{ message }}
+            </span>
+        {% endfor %}
+        </div>
+    {% endif %}
 
     <div class="mt-4 ml-4 mr-4">
         <div class="row border-bottom border-3">
@@ -22,18 +33,18 @@
             <tr class="d-flex">
                 <th scope="row" class="col-2">Nazwa Przepisu</th>
                 <td class="col-7">
-                    <input class="w-100 p-1" value="">
+                    <input class="w-100 p-1" name="recipe_name" value="">
                 </td>
             </tr>
             <tr class="d-flex">
                 <th scope="row" class="col-2">Opis przepisu</th>
                 <td class="col-7"><textarea class="w-100 p-1"
-                                            rows="5"></textarea></td>
+                                            rows="5" name="recipe_description"></textarea></td>
             </tr>
             <tr class="d-flex">
-                <th scope="row" class="col-2">Przygotowani(minuty)</th>
+                <th scope="row" class="col-2">Przygotowanie(minuty)</th>
                 <td class="col-3">
-                    <input class="p-1" type="number" value="">
+                    <input class="p-1" type="number" min="1" name="preparation_time" value="">
                 </td>
             </tr>
             </tbody>
@@ -48,14 +59,16 @@
         </div>
         <div class="row d-flex">
             <div class="col-5 p-4">
-                <textarea class="w-100 p-1" rows="10"></textarea>
+                <textarea class="w-100 p-1" rows="10" name="instructions"></textarea>
             </div>
             <div class="col-2"></div>
 
             <div class="col-5 p-4">
-                <textarea class="w-100 p-1" rows="10"></textarea>
+                <textarea class="w-100 p-1" rows="10" name="ingredients"></textarea>
             </div>
         </div>
     </div>
+
 </div>
+    </form>
 {% endblock content %}
