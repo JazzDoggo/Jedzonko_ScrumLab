@@ -19,19 +19,22 @@ from django.http import HttpResponse
 from jedzonko.views import *
 
 
+#### DO SPRAWDZANIA LINKOW
+def empty(request, id=0):
+    return HttpResponse('Empty page')
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', IndexView.as_view(), name='main-page'),
     path('main/', DashBoard.as_view(), name='dashboard'),
-    # path('recipe/<id>/', IndexView.as_view(), ),
-    path('recipe/list/', IndexView.as_view(), name='recipe-list'),
-    path('recipe/add/', AddRecipe.as_view(), name='recipe-add'),
-    # path('recipe/modify/<id>/', IndexView.as_view(), ),
-    # path('plan/<id>/', IndexView.as_view(), ),
-    path('plan/list/', IndexView.as_view(), name='plan-list'),
-    path('plan/add/', IndexView.as_view(), name='plan-add'),
-    path('plan/add-recipe/', IndexView.as_view(), name='plan-add-recipe'),
+    path('recipe/<id>/', empty, ),
+    path('recipe/list/', empty, name='recipe-list'),
+    path('recipe/add/', empty, name='recipe-add'),
+    path('recipe/modify/<id>/', empty, ),
+    path('plan/<id>/', empty, ),
+    path('plan/list/', empty, name='plan-list'),
+    path('plan/add/', empty, name='plan-add'),
+    path('plan/add-recipe/', empty, name='plan-add-recipe'),
 
 ]
