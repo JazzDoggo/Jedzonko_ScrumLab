@@ -62,3 +62,4 @@ class Migration(migrations.Migration):
             name='recipes',
             field=models.ManyToManyField(through='jedzonko.RecipePlan', to='jedzonko.recipe'),
         ),
+]
