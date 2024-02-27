@@ -29,7 +29,7 @@ urlpatterns = [
     path('', IndexView.as_view(), name='main-page'),
     path('main/', DashBoard.as_view(), name='dashboard'),
     path('recipe/<id>/', empty, ),
-    path('recipe/list/', empty, name='recipe-list'),
+    path('recipe/list/', RecipeView.as_view(), name='app-recipes'),
     path('recipe/add/', empty, name='recipe-add'),
     path('recipe/modify/<id>/', empty, ),
     path('plan/<id>/', empty, ),
