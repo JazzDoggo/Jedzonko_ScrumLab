@@ -34,15 +34,14 @@
             </div>
             <div class="alert-item alert-light">
                 <i class="far icon-calendar fa-calendar-alt"></i>
-                <span class="font-weight-bold">Liczba przepisów: {{ recipes }}</span>
+                <span class="font-weight-bold">Liczba przepisów {{ recipes }}</span>
             </div>
         </div>
     </div>
-    <div class="m-4 p-4 border-dashed">
-        <h2 class="dashboard-content-title">
-            <span>Ostatnio dodany plan:</span> {% if no_of_plans > 0%}{{ newest_recipe_plan.plan.name}} {% else %} Nie ma żadnego planu {% endif %}
-        </h2>
-{% if no_of_plans > 0 %}
+<div class="m-4 p-4 border-dashed">
+    <h2 class="dashboard-content-title">
+        <span>Ostatnio dodany plan:</span> {% if newest_plan %}{{ newest_plan.name }} {% else %} Nie ma żadnego planu {% endif %}
+    </h2>
     {% for day in newest_recipe_plan_days %}
         <table class="table">
             <thead>
@@ -54,86 +53,20 @@
             </thead>
             <tbody>
                 {% for meal in newest_recipe_plan_meal %}
-                    {% if meal.day_name == day %}
                         <tr class="d-flex">
-                            <td class="col-2">{{ meal.meal_name }}</td>
-                            <td class="col-8">{{ meal.recipe }}</td>
+                            <td class="col-2">{{ meal }}</td>
+                        {% for recipe in recipes %}
+
+                                <td class="col-8">{{ recipe.name }}</td>
+
+                        {% endfor %}
                             <td class="col-2">
-                                <button type="button" class="btn btn-primary rounded-0"><a href="app-recipe-details.html">Szczegóły</a></button>
+                                <a href="app-recipe-details.html" class="btn btn-primary rounded-0">Szczegóły</a>
                             </td>
                         </tr>
-                    {% endif %}
                 {% endfor %}
             </tbody>
         </table>
     {% endfor %}
-{% else %}
-        </tbody>
-        </table>
-        <table class="table">
-            <thead>
-            <tr class="d-flex">
-                <th class="col-2">Poniedziałek</th>
-                <th class="col-8"></th>
-                <th class="col-2"></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr class="d-flex">
-                <td class="col-2">śniadanie</td>
-                <td class="col-8">płatki owsiane z jagodami i komosą ryżową</td>
-                <td class="col-2">
-                    <button type="button" class="btn btn-primary rounded-0">Szczegóły</button>
-                </td>
-            </tr>
-            <tr class="d-flex">
-                <td class="col-2">śniadanie</td>
-                <td class="col-8">kanapka z pastą rybną</td>
-                <td class="col-2">
-                    <button type="button" class="btn btn-primary rounded-0">Szczegóły</button>
-                </td>
-            </tr>
-            <tr class="d-flex">
-                <td class="col-2">obiad</td>
-                <td class="col-8">zupa pomidorowa</td>
-                <td class="col-2">
-                    <button type="button" class="btn btn-primary rounded-0">Szczegóły</button>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <table class="table">
-            <thead>
-            <tr class="d-flex">
-                <th class="col-2">Wtorek</th>
-                <th class="col-8"></th>
-                <th class="col-2"></th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr class="d-flex">
-                <td class="col-2">śniadanie</td>
-                <td class="col-8">płatki owsiane z jagodami i komosą ryżową</td>
-                <td class="col-2">
-                    <button type="button" class="btn btn-primary rounded-0">Szczegóły</button>
-                </td>
-            </tr>
-            <tr class="d-flex">
-                <td class="col-2">drugie śniadanie</td>
-                <td class="col-8">pączki</td>
-                <td class="col-2">
-                    <button type="button" class="btn btn-primary rounded-0">Szczegóły</button>
-                </td>
-            </tr>
-            <tr class="d-flex">
-                <td class="col-2">obiad</td>
-                <td class="col-8">schabowy w panierce</td>
-                <td class="col-2">
-                    <button type="button" class="btn btn-primary rounded-0">Szczegóły</button>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-{% endif %}
-    </div>
+</div>
 {% endblock content %}
