@@ -1,17 +1,25 @@
 from datetime import datetime
+from random import shuffle
 
 from django.core.paginator import Paginator
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views import View
+from jedzonko.models import Recipe
 from django.contrib import messages
 
-from jedzonko.models import Recipe, Plan
+
+from jedzonko.models import Recipe, Plan, RecipePlan
 
 
 class IndexView(View):
     def get(self, request):
-        ctx = {"actual_date": datetime.now()}
+        recipes = list(Recipe.objects.all())
+        shuffle(recipes)
+        recipes = recipes[:3]
+
+        ctx = {"actual_date": datetime.now(),
+               "recipes": recipes}
         return render(request, "index.html", ctx)
 
 
@@ -19,7 +27,25 @@ class DashBoard(View):
     def get(self, request):
         no_of_recipes = Recipe.objects.all().count()
         no_of_plans = Plan.objects.all().count()
-        return render(request, "dashboard.html", {"recipes": no_of_recipes, "plans": no_of_plans})
+        plans_by_created = Plan.objects.all().order_by('-created')
+        newest_recipe_plan_meal = None
+        if no_of_plans > 0:
+            newest_plan = plans_by_created[0]
+            newest_recipe_plan = RecipePlan.objects.filter(plan=newest_plan)
+            newest_recipe_plan_days = newest_recipe_plan.day_name.all()
+            newest_recipe_plan_recipes = newest_recipe_plan.recipes.all()
+            newest_recipe_plan_meal = newest_recipe_plan.meals.all()
+            return render(request, "dashboard.html", {
+                "recipes": no_of_recipes,
+                "plans": no_of_plans,
+                "newest_recipe_plan_meal": newest_recipe_plan_meal,
+                "newest_recipe_plan_days": newest_recipe_plan_days,
+                "newest_recipe_plan_recipes": newest_recipe_plan_recipes})
+        return render(request, "dashboard.html", {
+            "recipes": no_of_recipes,
+            "plans": no_of_plans,
+            "newest_recipe_plan_meal": newest_recipe_plan_meal
+        })
 
 
 class RecipesView(View):
@@ -54,8 +80,8 @@ class AddRecipe(View):
         else:
             messages.add_message(request, messages.INFO, "Wypełnij poprawnie wszystkie pola")
             return redirect("/recipe/add/")
-
-
+          
+          
 class PlanListView(View):
     def get(self, request):
         plans = Plan.objects.all().order_by('name')
@@ -65,3 +91,19 @@ class PlanListView(View):
         plans_paged = paginator.get_page(page_number)
         response = render(request, 'app-schedules.html', {'plans': plans_paged})
         return response
+      
+      
+class PlanAdd(View):
+    def get(self, request):
+        return render(request, "app-add-schedules.html")
+
+    def post(self, request):
+        name = request.POST.get("plan_name")
+        description = request.POST.get("plan_description")
+        if name and description:
+            new_plan = Plan.objects.create(name=name, description=description)
+            return redirect(f"/plan/{new_plan.id}/details")
+        else:
+            messages.add_message(request, messages.INFO, "Wypełnij poprawnie wszystkie pola")
+            return redirect("/plan/add/")
+
