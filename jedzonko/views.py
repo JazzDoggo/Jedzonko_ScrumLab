@@ -7,7 +7,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib import messages
 
-from jedzonko.models import Recipe, Plan, RecipePlan
+from jedzonko.models import Recipe, Plan, RecipePlan, DayName
 
 
 class IndexView(View):
@@ -20,27 +20,31 @@ class DashBoard(View):
     def get(self, request):
         no_of_recipes = Recipe.objects.all().count()
         no_of_plans = Plan.objects.all().count()
-        plans_by_created = Plan.objects.all().order_by('-created')
         newest_recipe_plan_meal = None
+
         if no_of_plans > 0:
-            newest_plan = plans_by_created[0]
+            newest_plan = Plan.objects.order_by('-created').first()
             newest_recipe_plan = RecipePlan.objects.filter(plan=newest_plan)
-            newest_recipe_plan_days = newest_recipe_plan.day_name.all()
-            newest_recipe_plan_recipes = newest_recipe_plan.recipes.all()
-            newest_recipe_plan_meal = newest_recipe_plan.meals.all()
-            return render(request, "dashboard.html", {
-                "recipes": no_of_recipes ,
-                "plans": no_of_plans,
-                "newest_recipe_plan_meal": newest_recipe_plan_meal,
-                "newest_recipe_plan_days": newest_recipe_plan_days,
-                "newest_recipe_plan_recipes": newest_recipe_plan_recipes})
+            newest_recipe_plan_days = newest_recipe_plan.values_list('day_name', flat=True)
+            newest_recipe_plan_recipes = newest_recipe_plan.values_list('recipe', flat=True)
+            newest_recipe_plan_meal = newest_recipe_plan.values_list('meal_name', flat=True)
+            days = DayName.objects.all()
+            recipes = Recipe.objects.all()
+            for recipe in recipes:
+                print(recipe.name)
+
+
         return render(request, "dashboard.html", {
             "recipes": no_of_recipes,
             "plans": no_of_plans,
-            "newest_recipe_plan_meal": newest_recipe_plan_meal
+            "newest_plan": newest_plan,
+            "newest_recipe_plan": newest_recipe_plan,
+            "newest_recipe_plan_meal": newest_recipe_plan_meal,
+            "newest_recipe_plan_days": newest_recipe_plan_days,
+            "days": days,
+            "recipes": recipes,
+            "newest_recipe_plan_recipes": newest_recipe_plan_recipes
         })
-
-
 
 
 class RecipesView(View):

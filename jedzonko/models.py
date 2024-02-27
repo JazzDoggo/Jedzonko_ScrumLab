@@ -1,6 +1,7 @@
 from django.db import models
 
 
+
 # Create your models here.
 class Recipe(models.Model):
     id = models.AutoField(primary_key=True)
@@ -35,4 +36,3 @@ class RecipePlan(models.Model):
     plan = models.ForeignKey(Plan, on_delete=models.CASCADE)
     order = models.IntegerField(unique=True)
     day_name = models.ForeignKey(DayName, on_delete=models.CASCADE)
-
