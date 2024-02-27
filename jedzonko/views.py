@@ -1,7 +1,6 @@
 from datetime import datetime
 from random import shuffle
 
-from django.core import paginator
 from django.core.paginator import Paginator
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -52,7 +51,7 @@ class DashBoard(View):
 class RecipesView(View):
     def get(self, request):
         recipes = Recipe.objects.all().order_by('-votes', '-created')
-        paginator = Paginator(recipes, 50)  ## LICZBA WYSWIETLANYCH KOMENTARZY NA STRONE
+        paginator = Paginator(recipes, 50)  # LICZBA WYSWIETLANYCH KOMENTARZY NA STRONE
         page_number = request.GET.get('page')
         recipes_in_pages = paginator.get_page(page_number)
         return render(request, "app-recipes.html", {"recipes": recipes_in_pages})
@@ -81,8 +80,19 @@ class AddRecipe(View):
         else:
             messages.add_message(request, messages.INFO, "Wypełnij poprawnie wszystkie pola")
             return redirect("/recipe/add/")
+          
+          
+class PlanListView(View):
+    def get(self, request):
+        plans = Plan.objects.all().order_by('name')
+        paginator = Paginator(plans, 50)
 
-
+        page_number = request.GET.get('page')
+        plans_paged = paginator.get_page(page_number)
+        response = render(request, 'app-schedules.html', {'plans': plans_paged})
+        return response
+      
+      
 class PlanAdd(View):
     def get(self, request):
         return render(request, "app-add-schedules.html")
@@ -96,3 +106,4 @@ class PlanAdd(View):
         else:
             messages.add_message(request, messages.INFO, "Wypełnij poprawnie wszystkie pola")
             return redirect("/plan/add/")
+

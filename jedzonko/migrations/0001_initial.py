@@ -1,7 +1,6 @@
 
 import django.db.models.deletion
 
-
 from django.db import migrations, models
 
 
@@ -35,13 +34,14 @@ class Migration(migrations.Migration):
             name='Recipe',
             fields=[
                 ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('name', models.CharField(max_length=64)),
+                ('name', models.CharField(max_length=255)),
                 ('ingredients', models.TextField()),
                 ('description', models.TextField()),
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('updated', models.DateTimeField(auto_now=True)),
-                ('preparation_time', models.TimeField()),
+                ('preparation_time', models.IntegerField(default=0)),
                 ('votes', models.IntegerField(default=0)),
+                ('instructions', models.TextField()),
             ],
         ),
         migrations.CreateModel(
