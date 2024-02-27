@@ -8,8 +8,8 @@ from django.views import View
 from jedzonko.models import Recipe
 from django.contrib import messages
 
-
 from jedzonko.models import Recipe, Plan, RecipePlan, DayName
+
 
 class IndexView(View):
     def get(self, request):
@@ -39,7 +39,6 @@ class DashBoard(View):
             for recipe in recipes:
                 print(recipe.name)
 
-
         return render(request, "dashboard.html", {
             "recipes": no_of_recipes,
             "plans": no_of_plans,
@@ -64,7 +63,10 @@ class RecipesView(View):
 
 class RecipeDetailView(View):
     def get(self, request, id):
-        return HttpResponse('RECIPE DETAILS ' + id)
+        recipe_with_id = Recipe.objects.get(id=id)
+        ingredient_list = recipe_with_id.ingredients.split(' ')
+
+        return render(request, 'app-recipe-details.html', {'recipe_with_id': recipe_with_id, 'ingredient_list': ingredient_list})
 
 
 class AddRecipe(View):
@@ -85,8 +87,8 @@ class AddRecipe(View):
         else:
             messages.add_message(request, messages.INFO, "Wypełnij poprawnie wszystkie pola")
             return redirect("/recipe/add/")
-          
-          
+
+
 class PlanListView(View):
     def get(self, request):
         plans = Plan.objects.all().order_by('name')
@@ -96,8 +98,8 @@ class PlanListView(View):
         plans_paged = paginator.get_page(page_number)
         response = render(request, 'app-schedules.html', {'plans': plans_paged})
         return response
-      
-      
+
+
 class PlanAdd(View):
     def get(self, request):
         return render(request, "app-add-schedules.html")
@@ -111,4 +113,3 @@ class PlanAdd(View):
         else:
             messages.add_message(request, messages.INFO, "Wypełnij poprawnie wszystkie pola")
             return redirect("/plan/add/")
-
