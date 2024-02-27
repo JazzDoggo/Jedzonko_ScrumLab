@@ -49,8 +49,6 @@ class DashBoard(View):
         })
 
 
-
-
 class RecipesView(View):
     def get(self, request):
         recipes = Recipe.objects.all().order_by('-votes', '-created')
@@ -83,3 +81,18 @@ class AddRecipe(View):
         else:
             messages.add_message(request, messages.INFO, "Wypełnij poprawnie wszystkie pola")
             return redirect("/recipe/add/")
+
+
+class PlanAdd(View):
+    def get(self, request):
+        return render(request, "app-add-schedules.html")
+
+    def post(self, request):
+        name = request.POST.get("plan_name")
+        description = request.POST.get("plan_description")
+        if name and description:
+            new_plan = Plan.objects.create(name=name, description=description)
+            return redirect(f"/plan/{new_plan.id}/details")
+        else:
+            messages.add_message(request, messages.INFO, "Wypełnij poprawnie wszystkie pola")
+            return redirect("/plan/add/")
