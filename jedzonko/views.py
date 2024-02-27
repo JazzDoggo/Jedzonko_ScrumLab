@@ -59,7 +59,7 @@ class AddRecipe(View):
 class PlanListView(View):
     def get(self, request):
         plans = Plan.objects.all().order_by('name')
-        paginator = Paginator(plans, 2)
+        paginator = Paginator(plans, 50)
 
         page_number = request.GET.get('page')
         plans_paged = paginator.get_page(page_number)
