@@ -2,6 +2,7 @@ from datetime import datetime
 from random import shuffle
 
 from django.core.paginator import Paginator
+from django.db.models import Count
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views import View
@@ -52,7 +53,6 @@ class DashBoard(View):
             "newest_recipe_plan_recipes": newest_recipe_plan_recipes
         })
 
-
 class RecipesView(View):
     def get(self, request):
         recipes = Recipe.objects.all().order_by('-votes', '-created')
@@ -67,6 +67,21 @@ class RecipeDetailView(View):
         return HttpResponse('RECIPE DETAILS ' + id)
 
 
+class PlanDetailView(View):
+    def get(self, request, id):
+        plan_with_id = Plan.objects.get(id=id)
+
+        # SLOWNIK DO SEGREGOWANIA PRZEPISOW PO DNIACH
+        recipe_plans = plan_with_id.recipeplan_set.all().order_by('order')
+        grouped_day_plan = {}
+        for plan in recipe_plans:
+            day_name = plan.day_name
+            if day_name not in grouped_day_plan:
+                grouped_day_plan[day_name] = []
+            grouped_day_plan[day_name].append(plan)
+        return render(request, 'app-details-schedules.html',
+                      {"plan_with_id": plan_with_id, "grouped_day_plan": grouped_day_plan})
+      
 class AddRecipe(View):
     def get(self, request):
         return render(request, "app-add-recipe.html")
@@ -111,4 +126,3 @@ class PlanAdd(View):
         else:
             messages.add_message(request, messages.INFO, "Wypełnij poprawnie wszystkie pola")
             return redirect("/plan/add/")
-
