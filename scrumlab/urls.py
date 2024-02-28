@@ -28,7 +28,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', IndexView.as_view(), name='main-page'),
     path('main/', DashBoard.as_view(), name='dashboard'),
-    path('recipe/<int:id>', RecipeDetailView.as_view(), name='recipe-id'),
+    path('recipe/<int:id>/', RecipeDetailView.as_view(), name='recipe-id'),
     path('recipe/list/', RecipesView.as_view(), name='recipe-list'),
     path('recipe/add/', AddRecipe.as_view(), name='recipe-add'),
     # path('recipe/modify/<id>/', empty, ),
