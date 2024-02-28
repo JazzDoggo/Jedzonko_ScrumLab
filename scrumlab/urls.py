@@ -28,13 +28,14 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', IndexView.as_view(), name='main-page'),
     path('main/', DashBoard.as_view(), name='dashboard'),
-    path('recipe/<id>', RecipeDetailView.as_view(), name='recipe-id'),
+    path('recipe/<int:id>', RecipeDetailView.as_view(), name='recipe-id'),
     path('recipe/list/', RecipesView.as_view(), name='recipe-list'),
-    path('recipe/add/', empty, name='recipe-add'),
+    path('recipe/add/', AddRecipe.as_view(), name='recipe-add'),
     # path('recipe/modify/<id>/', empty, ),
     path('plan/<id>/', PlanDetailView.as_view(), name='plan-id'),
     path('plan/list/', empty, name='plan-list'),
     path('plan/add/', empty, name='plan-add'),
     path('plan/add-recipe/', empty, name='plan-add-recipe'),
+    path('plan/<id>/details/', empty,)
 
 ]
