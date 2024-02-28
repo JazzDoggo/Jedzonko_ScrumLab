@@ -8,6 +8,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 from jedzonko.models import Recipe
 from django.contrib import messages
+from django.urls import reverse
 
 from jedzonko.models import Recipe, Plan, RecipePlan, DayName
 
@@ -66,6 +67,7 @@ class DashBoard(View):
             "recipeplan_list": recipeplan_list
         })
 
+
 class RecipesView(View):
     def get(self, request):
         recipes = Recipe.objects.all().order_by('-votes', '-created')
@@ -80,7 +82,14 @@ class RecipeDetailView(View):
         recipe_with_id = Recipe.objects.get(id=id)
         ingredient_list = recipe_with_id.ingredients.split(' ')
 
-        return render(request, 'app-recipe-details.html', {'recipe_with_id': recipe_with_id, 'ingredient_list': ingredient_list})
+        return render(request, 'app-recipe-details.html',
+                      {'recipe_with_id': recipe_with_id, 'ingredient_list': ingredient_list})
+
+    def post(self, request, id):  # DODAWANIE LIKE/POST METHOD
+        recipe_with_id = Recipe.objects.get(id=id)
+        recipe_with_id.votes += 1
+        recipe_with_id.save()
+        return redirect(reverse('recipe-id', kwargs={'id': id}))
 
 
 class PlanDetailView(View):
@@ -97,7 +106,8 @@ class PlanDetailView(View):
             grouped_day_plan[day_name].append(plan)
         return render(request, 'app-details-schedules.html',
                       {"plan_with_id": plan_with_id, "grouped_day_plan": grouped_day_plan})
-      
+
+
 class AddRecipe(View):
     def get(self, request):
         return render(request, "app-add-recipe.html")
