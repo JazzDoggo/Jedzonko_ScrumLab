@@ -148,7 +148,21 @@ class PlanAdd(View):
         description = request.POST.get("plan_description")
         if name and description:
             new_plan = Plan.objects.create(name=name, description=description)
-            return redirect(f"/plan/{new_plan.id}/details")
+            return redirect(f"/plan/{new_plan.id}/")
         else:
             messages.add_message(request, messages.INFO, "Wypełnij poprawnie wszystkie pola")
             return redirect("/plan/add/")
+
+
+class PlanAddRecipeView(View):
+    def get(self, request):
+        days = DayName.objects.all()
+        all_plans = Plan.objects.all()
+        recipes = Recipe.objects.all()
+
+        return render(request, 'app-schedules-meal-recipe.html', {'all_plans': all_plans,
+                                                                  'days': days, 'recipes': recipes,
+                                                                  })
+
+    def post(self, request):
+        return redirect("/plan/add-recipe/")
