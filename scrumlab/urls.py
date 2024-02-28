@@ -31,11 +31,11 @@ urlpatterns = [
     path('recipe/<int:id>/', RecipeDetailView.as_view(), name='recipe-id'),
     path('recipe/list/', RecipesView.as_view(), name='recipe-list'),
     path('recipe/add/', AddRecipe.as_view(), name='recipe-add'),
-    # path('recipe/modify/<id>/', empty, ),
-    path('plan/<id>/', PlanDetailView.as_view(), name='plan-id'),
-    path('plan/list/', empty, name='plan-list'),
-    path('plan/add/', empty, name='plan-add'),
+    # path('recipe/modify/<int:id>/', empty, ),
+    path('plan/<int:id>/', PlanDetailView.as_view(), name='plan-id'),
+    path('plan/list/', PlanListView.as_view(), name='plan-list'),
+    path('plan/add/', PlanAdd.as_view(), name='plan-add'),
     path('plan/add-recipe/', empty, name='plan-add-recipe'),
-    path('plan/<id>/details/', empty,)
+    path('plan/<int:id>/details/', empty,)
 
 ]
