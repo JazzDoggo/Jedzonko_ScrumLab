@@ -36,6 +36,4 @@ urlpatterns = [
     path('plan/list/', PlanListView.as_view(), name='plan-list'),
     path('plan/add/', PlanAdd.as_view(), name='plan-add'),
     path('plan/add-recipe/', empty, name='plan-add-recipe'),
-    path('plan/<int:id>/details/', empty,)
-
 ]
