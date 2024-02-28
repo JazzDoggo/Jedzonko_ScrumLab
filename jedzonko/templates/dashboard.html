@@ -26,15 +26,11 @@
         <div class="dashboard-alerts">
             <div class="alert-item alert-info">
                 <i class="fas icon-circle fa-info-circle"></i>
-                <span class="font-weight-bold">Liczba przepisów: 1</span>
+                <span class="font-weight-bold">Liczba przepisów: {{ recipes.count }}</span>
             </div>
             <div class="alert-item alert-light">
                 <i class="far icon-calendar fa-calendar-alt"></i>
                 <span class="font-weight-bold">Liczba planów: {{ plans }}</span>
-            </div>
-            <div class="alert-item alert-light">
-                <i class="far icon-calendar fa-calendar-alt"></i>
-                <span class="font-weight-bold">Liczba przepisów {{ recipes }}</span>
             </div>
         </div>
     </div>
@@ -42,31 +38,33 @@
     <h2 class="dashboard-content-title">
         <span>Ostatnio dodany plan:</span> {% if newest_plan %}{{ newest_plan.name }} {% else %} Nie ma żadnego planu {% endif %}
     </h2>
-    {% for day in newest_recipe_plan_days %}
+    {% for day in days_list %}
+        {% for day_name in newest_recipe_plan_days %}
+            {% if day.id == day_name %}
         <table class="table">
             <thead>
                 <tr class="d-flex">
-                    <th class="col-2">{{ day }}</th>
+                    <th class="col-2">{{ day.name }}</th>
                     <th class="col-8"></th>
                     <th class="col-2"></th>
                 </tr>
             </thead>
             <tbody>
-                {% for meal in newest_recipe_plan_meal %}
+            {% for recipe_plan in recipeplan_list %}
+                {% if recipe_plan.day_name == day %}
                         <tr class="d-flex">
-                            <td class="col-2">{{ meal }}</td>
-                        {% for recipe in recipes %}
-
-                                <td class="col-8">{{ recipe.name }}</td>
-
-                        {% endfor %}
+                            <td class="col-2">{{ recipe_plan.meal_name }}</td>
+                            <td class="col-8">{{ recipe_plan.recipe.name }}</td>
                             <td class="col-2">
                                 <a href="app-recipe-details.html" class="btn btn-primary rounded-0">Szczegóły</a>
                             </td>
                         </tr>
-                {% endfor %}
-            </tbody>
+                {% endif %}
+            {% endfor %}
+             </tbody>
+            {% endif %}
         </table>
-    {% endfor %}
+       {% endfor %}
+    {% endfor %} 
 </div>
 {% endblock content %}

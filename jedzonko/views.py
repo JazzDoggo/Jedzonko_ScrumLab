@@ -25,25 +25,39 @@ class DashBoard(View):
         if no_of_plans > 0:
             newest_plan = Plan.objects.order_by('-created').first()
             newest_recipe_plan = RecipePlan.objects.filter(plan=newest_plan)
-            newest_recipe_plan_days = newest_recipe_plan.values_list('day_name', flat=True)
+            newest_recipe_plan_days = set(newest_recipe_plan.values_list('day_name', flat=True))
             newest_recipe_plan_recipes = newest_recipe_plan.values_list('recipe', flat=True)
             newest_recipe_plan_meal = newest_recipe_plan.values_list('meal_name', flat=True)
             days = DayName.objects.all()
+            recipeplans = RecipePlan.objects.all()
             recipes = Recipe.objects.all()
+            days_list = []
+            for day in days:
+                if day.id in newest_recipe_plan_days:
+                    days_list.append(day)
+            recipes_list = []
             for recipe in recipes:
-                print(recipe.name)
+                if recipe.id in newest_recipe_plan_recipes:
+                    recipes_list.append(recipe)
+
+            recipeplan_list = []
+            for recipeplan in recipeplans:
+                for meal in newest_recipe_plan_meal:
+                    if recipeplan.meal_name == meal:
+                        recipeplan_list.append(recipeplan)
+
+            for recipeplan in recipeplan_list:
+                print(recipeplan.recipe.name)
 
 
         return render(request, "dashboard.html", {
             "recipes": no_of_recipes,
             "plans": no_of_plans,
             "newest_plan": newest_plan,
-            "newest_recipe_plan": newest_recipe_plan,
-            "newest_recipe_plan_meal": newest_recipe_plan_meal,
             "newest_recipe_plan_days": newest_recipe_plan_days,
-            "days": days,
             "recipes": recipes,
-            "newest_recipe_plan_recipes": newest_recipe_plan_recipes
+            "days_list": days_list,
+            "recipeplan_list": recipeplan_list
         })
 
 
