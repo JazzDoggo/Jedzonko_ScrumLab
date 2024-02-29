@@ -162,4 +162,20 @@ class PlanAddRecipeView(View):
                       {'all_plans': all_plans, 'days': days, 'recipes': recipes})
 
     def post(self, request):
-        return redirect("/plan/add-recipe/")
+        plan = request.POST.get("choosePlan")
+        name = request.POST.get("name")
+        number = request.POST.get("number")
+        recipe = request.POST.get("recipe")
+        day = request.POST.get("day")
+        plan_exists = Plan.objects.filter(name=plan).exists()
+        recipe_exists = Recipe.objects.filter(name=recipe).exists()
+        day_exists = DayName.objects.filter(name=day).exists()
+        number_exists = RecipePlan.objects.filter(order=number).exists()
+        if plan_exists and name != "" and number != "" and not number_exists and recipe_exists and day_exists:
+            day_object = DayName.objects.get(name=day)
+            recipe_object = Recipe.objects.get(name=recipe)
+            plan_object = Plan.objects.get(name=plan)
+            RecipePlan.objects.create(meal_name=name, order=number,
+                                day_name=day_object, recipe=recipe_object, plan=plan_object)
+            return redirect('plan-id', id=plan_object.id)
+        return redirect('plan-add-recipe')
