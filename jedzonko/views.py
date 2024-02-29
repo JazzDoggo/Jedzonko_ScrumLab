@@ -3,7 +3,7 @@ from random import shuffle
 
 from django.core.paginator import Paginator
 from django.db.models import Count
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib import messages
@@ -127,6 +127,26 @@ class AddRecipe(View):
             return redirect("/recipe/add/")
 
 
+# EDYTOWANIE PRZEPISU-----------
+class ModifyRecipe(View):
+    def get(self, request, id):
+        try:
+            recipe_with_id = Recipe.objects.get(id=id)
+        except Recipe.DoesNotExist:
+            return HttpResponseNotFound("<h1>Recipe doesn't exist</h1>")
+        return render(request, 'app-edit-recipe.html', {'recipe_with_id': recipe_with_id})
+    def post(self, request,id):
+
+        recipe_with_id = Recipe.objects.get(id=id)
+        # WYSWIETLA PONOWNIE PRZEPIS DO EDYCJI ^^^^ DO ZMIANY
+
+        edited_name = request.POST.get('name')
+        edited_description = request.POST.get('description')
+        edited_preparation_time = request.POST.get('preparation_time')
+        edited_instructions = request.POST.get('instructions')
+        edited_ingredients = request.POST.get('ingredients')
+
+        return render(request, 'app-edit-recipe.html', {'recipe_with_id': recipe_with_id})
 class PlanListView(View):
     def get(self, request):
         plans = Plan.objects.all().order_by('name')
