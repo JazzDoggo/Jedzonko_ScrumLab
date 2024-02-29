@@ -53,9 +53,6 @@ class DashBoard(View):
                     if recipeplan.meal_name == meal:
                         recipeplan_list.append(recipeplan)
 
-            for recipeplan in recipeplan_list:
-                print(recipeplan.recipe.name)
-
 
         return render(request, "dashboard.html", {
             "recipes": no_of_recipes,
