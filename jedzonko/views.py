@@ -6,10 +6,8 @@ from django.db.models import Count
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.views import View
-from jedzonko.models import Recipe
 from django.contrib import messages
 from django.urls import reverse
-
 from jedzonko.models import Recipe, Plan, RecipePlan, DayName
 
 
@@ -67,7 +65,6 @@ class DashBoard(View):
             "recipeplan_list": recipeplan_list
         })
 
-
 class RecipesView(View):
     def get(self, request):
         recipes = Recipe.objects.all().order_by('-votes', '-created')
@@ -79,6 +76,15 @@ class RecipesView(View):
 
 class RecipeDetailView(View):
     def get(self, request, id):
+        return HttpResponse('RECIPE DETAILS ' + id)
+
+
+class PlanAddView(View):
+    def get(self, request):
+        return render(request, "app-add-schedules.html")
+
+    def post(self, request):
+        return render(request, "app-add-schedules.html")
         recipe_with_id = Recipe.objects.get(id=id)
         ingredient_list = recipe_with_id.ingredients.split(' ')
 
