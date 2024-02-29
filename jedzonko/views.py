@@ -8,6 +8,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib import messages
 from django.urls import reverse
+
 from jedzonko.models import Recipe, Plan, RecipePlan, DayName
 
 
@@ -65,6 +66,7 @@ class DashBoard(View):
             "recipeplan_list": recipeplan_list
         })
 
+
 class RecipesView(View):
     def get(self, request):
         recipes = Recipe.objects.all().order_by('-votes', '-created')
@@ -76,15 +78,6 @@ class RecipesView(View):
 
 class RecipeDetailView(View):
     def get(self, request, id):
-        return HttpResponse('RECIPE DETAILS ' + id)
-
-
-class PlanAddView(View):
-    def get(self, request):
-        return render(request, "app-add-schedules.html")
-
-    def post(self, request):
-        return render(request, "app-add-schedules.html")
         recipe_with_id = Recipe.objects.get(id=id)
         ingredient_list = recipe_with_id.ingredients.split(' ')
 
@@ -154,7 +147,19 @@ class PlanAdd(View):
         description = request.POST.get("plan_description")
         if name and description:
             new_plan = Plan.objects.create(name=name, description=description)
-            return redirect(f"/plan/{new_plan.id}/details")
+            return redirect(f"/plan/{new_plan.id}/")
         else:
             messages.add_message(request, messages.INFO, "Wypełnij poprawnie wszystkie pola")
             return redirect("/plan/add/")
+
+
+class PlanAddRecipeView(View):
+    def get(self, request):
+        days = DayName.objects.all()
+        all_plans = Plan.objects.all()
+        recipes = Recipe.objects.all()
+        return render(request, 'app-schedules-meal-recipe.html',
+                      {'all_plans': all_plans, 'days': days, 'recipes': recipes})
+
+    def post(self, request):
+        return redirect("/plan/add-recipe/")
