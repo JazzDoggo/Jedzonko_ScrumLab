@@ -18,9 +18,11 @@
                 </form>
 
 
-                <div class="col d-flex justify-content-end mb-2"><a
-                        href="/app-recipes.html"
-                        class="btn btn-color rounded-0 pt-0 pb-0 pr-4 pl-4">Powrót</a>
+                <div class="col d-flex justify-content-end mb-2">
+                    <a href="{% url "plan-add-recipe" %}"
+                        class="btn btn-color rounded-0 pt-0 pb-0 pr-4 pl-4 mr-2">Dodaj przepis do planu</a>
+                    <a href="/app-recipes.html" 
+                       class="btn btn-color rounded-0 pt-0 pb-0 pr-4 pl-4">Powrót</a>
                 </div>
             </div>
 
