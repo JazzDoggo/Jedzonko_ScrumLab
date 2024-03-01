@@ -3,10 +3,9 @@ from random import shuffle
 
 from django.core.paginator import Paginator
 from django.db.models import Count
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render, redirect
 from django.views import View
-from jedzonko.models import Recipe
 from django.contrib import messages
 from django.urls import reverse
 
@@ -87,7 +86,10 @@ class RecipeDetailView(View):
 
     def post(self, request, id):  # DODAWANIE LIKE/POST METHOD
         recipe_with_id = Recipe.objects.get(id=id)
-        recipe_with_id.votes += 1
+        if 'like' in request.POST:
+            recipe_with_id.votes += 1
+        elif 'dislike' in request.POST:
+            recipe_with_id.votes -= 1
         recipe_with_id.save()
         return redirect(reverse('recipe-id', kwargs={'id': id}))
 
@@ -128,6 +130,26 @@ class AddRecipe(View):
             return redirect("/recipe/add/")
 
 
+# EDYTOWANIE PRZEPISU-----------
+class ModifyRecipe(View):
+    def get(self, request, id):
+        try:
+            recipe_with_id = Recipe.objects.get(id=id)
+        except Recipe.DoesNotExist:
+            return HttpResponseNotFound("<h1>Recipe doesn't exist</h1>")
+        return render(request, 'app-edit-recipe.html', {'recipe_with_id': recipe_with_id})
+    def post(self, request,id):
+
+        recipe_with_id = Recipe.objects.get(id=id)
+        # WYSWIETLA PONOWNIE PRZEPIS DO EDYCJI ^^^^ DO ZMIANY
+
+        edited_name = request.POST.get('name')
+        edited_description = request.POST.get('description')
+        edited_preparation_time = request.POST.get('preparation_time')
+        edited_instructions = request.POST.get('instructions')
+        edited_ingredients = request.POST.get('ingredients')
+
+        return render(request, 'app-edit-recipe.html', {'recipe_with_id': recipe_with_id})
 class PlanListView(View):
     def get(self, request):
         plans = Plan.objects.all().order_by('name')
@@ -152,3 +174,31 @@ class PlanAdd(View):
         else:
             messages.add_message(request, messages.INFO, "Wypełnij poprawnie wszystkie pola")
             return redirect("/plan/add/")
+
+
+class PlanAddRecipeView(View):
+    def get(self, request):
+        days = DayName.objects.all()
+        all_plans = Plan.objects.all()
+        recipes = Recipe.objects.all()
+        return render(request, 'app-schedules-meal-recipe.html',
+                      {'all_plans': all_plans, 'days': days, 'recipes': recipes})
+
+    def post(self, request):
+        plan = request.POST.get("choosePlan")
+        name = request.POST.get("name")
+        number = request.POST.get("number")
+        recipe = request.POST.get("recipe")
+        day = request.POST.get("day")
+        plan_exists = Plan.objects.filter(name=plan).exists()
+        recipe_exists = Recipe.objects.filter(name=recipe).exists()
+        day_exists = DayName.objects.filter(name=day).exists()
+        number_exists = RecipePlan.objects.filter(order=number).exists()
+        if plan_exists and name != "" and number != "" and not number_exists and recipe_exists and day_exists:
+            day_object = DayName.objects.get(name=day)
+            recipe_object = Recipe.objects.get(name=recipe)
+            plan_object = Plan.objects.get(name=plan)
+            RecipePlan.objects.create(meal_name=name, order=number,
+                                day_name=day_object, recipe=recipe_object, plan=plan_object)
+            return redirect('plan-id', id=plan_object.id)
+        return redirect('plan-add-recipe')

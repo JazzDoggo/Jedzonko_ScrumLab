@@ -12,7 +12,8 @@
                 <form action="{% url 'recipe-id' id=recipe_with_id.id %}" method="post">
                     {% csrf_token %}
                     <div class="col d-flex justify-content-end mb-2">
-                        <button id="like" class="btn btn-color rounded-0 pt-0 pb-0 pr-4 pl-4">Polub przepis</button>
+                        <button id="like" name="like" class="btn btn-color rounded-0 pt-0 pb-0 pr-4 pl-4">Polub przepis</button>
+                        <button name="dislike" class="btn btn-color rounded-0 pt-0 pb-0 pr-4 pl-4 ml-2">Nie lubię przepisu</button>
                     </div>
                 </form>
 

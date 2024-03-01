@@ -14,7 +14,6 @@ class Recipe(models.Model):
     votes = models.IntegerField(default=0)
     instructions = models.TextField()
 
-
 class Plan(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=128)
