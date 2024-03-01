@@ -33,7 +33,7 @@
                     <a class="nav-link" href="/about/">o aplikacji</a>
                 </li>
                 <li class="nav-item ml-4">
-                    <a class="nav-link disabled" href="{% url 'recipe-list' %})">Przepisy</a>
+                    <a class="nav-link disabled" href="{% url 'recipe-list' %}">Przepisy</a>
                 </li>
                 <li class="nav-item ml-4">
                     <a class="nav-link disabled" href="#contact">Kontakt</a>
@@ -45,15 +45,9 @@
     <section class="padding-medium story bg-light" id="about">
         <div class="container d-flex justify-content-center align-items-center">
             <div class="row">
-                <div class="col-4 mr-4">
-                    <div class="div-img">
-                    </div>
-                </div>
-
                 <div class="col-7 ml-4">
-                    <h1 class="pb-1">{{ page_title}}</h1>
-                    <p>{{ page_description }}
-                    </p>
+                    <h1 class="pb-1">{{ page.title}}</h1>
+                    <p>{{ page.description }}</p>
                 </div>
             </div>
         </div>

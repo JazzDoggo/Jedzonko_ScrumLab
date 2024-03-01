@@ -208,10 +208,16 @@ class PlanAddRecipeView(View):
 class AboutView(View):
     def get(self, request):
         try:
-            page_about = Page.objects.get(slug="about")
-            page_title = page_about.title
-            page_description = page_about.description
-            return render(request, "About.html", {"page_title": page_title,
-                                                  "page_description": page_description})
+            page = Page.objects.get(slug="about")
+            return render(request, "about.html", {"page": page})
         except:
             return redirect('/#about')
+
+
+class ContactPage(View):
+    def get(self, request):
+        try:
+            page = Page.objects.get(slug="contact")
+            return render(request, 'about.html', {'page': page})
+        except Page.DoesNotExist:
+            return render(request, 'index.html')
