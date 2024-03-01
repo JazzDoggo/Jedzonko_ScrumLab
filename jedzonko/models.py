@@ -1,6 +1,5 @@
 from django.db import models
-
-
+from django.utils.text import slugify
 
 # Create your models here.
 class Recipe(models.Model):
@@ -13,6 +12,7 @@ class Recipe(models.Model):
     preparation_time = models.IntegerField(default=0)
     votes = models.IntegerField(default=0)
     instructions = models.TextField()
+
 
 class Plan(models.Model):
     id = models.AutoField(primary_key=True)
@@ -35,3 +35,18 @@ class RecipePlan(models.Model):
     plan = models.ForeignKey(Plan, on_delete=models.CASCADE)
     order = models.IntegerField(unique=True)
     day_name = models.ForeignKey(DayName, on_delete=models.CASCADE)
+
+
+class Page(models.Model):
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    slug = models.SlugField(unique=True, max_length=255, blank=True)
+    id = models.BigAutoField(primary_key=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)
+        super(Page, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title

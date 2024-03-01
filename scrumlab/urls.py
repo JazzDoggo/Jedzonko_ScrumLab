@@ -19,6 +19,10 @@ from django.http import HttpResponse
 from jedzonko.views import *
 
 
+#### DO SPRAWDZANIA LINKOW
+def empty(request, id=0):
+    return HttpResponse('Empty page')
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),

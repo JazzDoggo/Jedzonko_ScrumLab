@@ -2,14 +2,12 @@ from datetime import datetime
 from random import shuffle
 
 from django.core.paginator import Paginator
-from django.db.models import Count
 from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib import messages
 from django.urls import reverse
-
-from jedzonko.models import Recipe, Plan, RecipePlan, DayName
+from jedzonko.models import Recipe, Plan, RecipePlan, DayName, Page
 
 
 class IndexView(View):
@@ -202,3 +200,11 @@ class PlanAddRecipeView(View):
                                 day_name=day_object, recipe=recipe_object, plan=plan_object)
             return redirect('plan-id', id=plan_object.id)
         return redirect('plan-add-recipe')
+
+
+def contact_page(request):
+    try:
+        page = Page.objects.get(slug="contact")
+        return render(request, 'contact.html', {'page': page})
+    except Page.DoesNotExist:
+        return render(request, 'index.html')
