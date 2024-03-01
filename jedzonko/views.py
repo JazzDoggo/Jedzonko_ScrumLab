@@ -2,7 +2,6 @@ from datetime import datetime
 from random import shuffle
 
 from django.core.paginator import Paginator
-from django.db.models import Count
 from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render, redirect
 from django.views import View
@@ -61,7 +60,7 @@ class DashBoard(View):
             "plans": no_of_plans,
             "newest_plan": newest_plan,
             "newest_recipe_plan_days": newest_recipe_plan_days,
-            "recipes": recipes,
+            # "recipes": recipes,
             "days_list": days_list,
             "recipeplan_list": recipeplan_list
         })
@@ -130,7 +129,7 @@ class AddRecipe(View):
             return redirect("/recipe/add/")
 
 
-# EDYTOWANIE PRZEPISU-----------
+# EDYTOWANIE PRZEPISU
 class ModifyRecipe(View):
     def get(self, request, id):
         try:
@@ -138,8 +137,8 @@ class ModifyRecipe(View):
         except Recipe.DoesNotExist:
             return HttpResponseNotFound("<h1>Recipe doesn't exist</h1>")
         return render(request, 'app-edit-recipe.html', {'recipe_with_id': recipe_with_id})
-    def post(self, request,id):
 
+    def post(self, request, id):
         recipe_with_id = Recipe.objects.get(id=id)
         # WYSWIETLA PONOWNIE PRZEPIS DO EDYCJI ^^^^ DO ZMIANY
 
@@ -150,6 +149,8 @@ class ModifyRecipe(View):
         edited_ingredients = request.POST.get('ingredients')
 
         return render(request, 'app-edit-recipe.html', {'recipe_with_id': recipe_with_id})
+
+
 class PlanListView(View):
     def get(self, request):
         plans = Plan.objects.all().order_by('name')
@@ -199,6 +200,6 @@ class PlanAddRecipeView(View):
             recipe_object = Recipe.objects.get(name=recipe)
             plan_object = Plan.objects.get(name=plan)
             RecipePlan.objects.create(meal_name=name, order=number,
-                                day_name=day_object, recipe=recipe_object, plan=plan_object)
+                                      day_name=day_object, recipe=recipe_object, plan=plan_object)
             return redirect('plan-id', id=plan_object.id)
         return redirect('plan-add-recipe')
