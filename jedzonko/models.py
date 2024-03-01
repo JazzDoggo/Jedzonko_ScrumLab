@@ -13,10 +13,10 @@ class Recipe(models.Model):
     votes = models.IntegerField(default=0)
 
 class Page(models.Model):
-    id = models.BigAutoField(primary_key = True)
-    title = models.CharField(max_length = 255)
+    title = models.CharField(max_length=255)
     description = models.TextField()
-    slug = models.SlugField(unique = True, max_length= 255 , blank = True)
+    slug = models.SlugField(unique=True, max_length=255, blank=True)
+    id = models.BigAutoField(primary_key=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:

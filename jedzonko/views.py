@@ -1,9 +1,9 @@
 from datetime import datetime
 from random import shuffle
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views import View
-from jedzonko.models import Recipe
+from jedzonko.models import Recipe, Page
 
 
 class IndexView(View):
@@ -26,3 +26,10 @@ class DashBoard(View):
 class RecipeView(View):
     def get(self,request):
         return render(request, 'app-recipes.html')
+
+def contact_page(request):
+    try:
+        page = Page.objects.get(slug="contact")
+        return render(request, 'contact.html', {'page': page})
+    except Page.DoesNotExist:
+        return render(request, 'index.html')

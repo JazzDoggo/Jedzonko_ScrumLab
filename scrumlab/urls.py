@@ -36,5 +36,4 @@ urlpatterns = [
     path('plan/list/', empty, name='plan-list'),
     path('plan/add/', empty, name='plan-add'),
     path('plan/add-recipe/', empty, name='plan-add-recipe'),
-
 ]
