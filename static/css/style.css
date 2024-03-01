@@ -457,3 +457,21 @@ margin: 0 auto !important;
 .schedules-content-header {
   margin-bottom: 50px;
 }
+
+/*------------------------------*/
+/*---- Pagination ----*/
+/*------------------------------*/
+
+.paginator {
+  padding: 10px;
+  display: inline-block;
+  background-color: #4b4c4a;
+  color: white;
+}
+.paginator-current {
+  padding: 10px;
+  display: inline-block;
+  background-color: #5a615f;
+  color: white;
+}
+
