@@ -19,10 +19,6 @@ from django.http import HttpResponse
 from jedzonko.views import *
 
 
-#### DO SPRAWDZANIA LINKOW
-def empty(request, id=0):
-    return HttpResponse('Empty page')
-
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -31,7 +27,7 @@ urlpatterns = [
     path('recipe/<int:id>/', RecipeDetailView.as_view(), name='recipe-id'),
     path('recipe/list/', RecipesView.as_view(), name='recipe-list'),
     path('recipe/add/', AddRecipe.as_view(), name='recipe-add'),
-    # path('recipe/modify/<int:id>/', empty, ),
+    path('recipe/modify/<int:id>/', ModifyRecipe.as_view(), name='modyfi-recipe'),
     path('plan/<int:id>/', PlanDetailView.as_view(), name='plan-id'),
     path('plan/list/', PlanListView.as_view(), name='plan-list'),
     path('plan/add/', PlanAdd.as_view(), name='plan-add'),
