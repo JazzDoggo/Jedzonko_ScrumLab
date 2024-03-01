@@ -9,7 +9,7 @@ from django.views import View
 from django.contrib import messages
 from django.urls import reverse
 
-from jedzonko.models import Recipe, Plan, RecipePlan, DayName
+from jedzonko.models import Recipe, Plan, RecipePlan, DayName, Page
 
 
 class IndexView(View):
@@ -182,3 +182,15 @@ class PlanAddRecipeView(View):
                                 day_name=day_object, recipe=recipe_object, plan=plan_object)
             return redirect('plan-id', id=plan_object.id)
         return redirect('plan-add-recipe')
+
+
+class AboutView(View):
+    def get(self, request):
+        try:
+            page_about = Page.objects.get(slug="about")
+            page_title = page_about.title
+            page_description = page_about.description
+            return render(request, "About.html", {"page_title": page_title,
+                                                  "page_description": page_description})
+        except:
+            return redirect('/#about')
