@@ -26,7 +26,7 @@
         <div class="dashboard-alerts">
             <div class="alert-item alert-info">
                 <i class="fas icon-circle fa-info-circle"></i>
-                <span class="font-weight-bold">Liczba przepisów: {{ recipes }}</span>
+                <span class="font-weight-bold">Liczba przepisów: {{ recipe_number }}</span>
 
             </div>
             <div class="alert-item alert-light">
@@ -57,7 +57,7 @@
                             <td class="col-2">{{ recipe_plan.meal_name }}</td>
                             <td class="col-8">{{ recipe_plan.recipe.name }}</td>
                             <td class="col-2">
-                                <a href="app-recipe-details.html" class="btn btn-primary rounded-0">Szczegóły</a>
+                                <a href="{% url 'recipe-id' recipe_plan.recipe.id %}" class="btn btn-primary rounded-0">Szczegóły</a>
                             </td>
                         </tr>
                 {% endif %}

@@ -56,7 +56,7 @@ class DashBoard(View):
                 print(recipeplan.recipe.name)
 
         return render(request, "dashboard.html", {
-            "recipes": no_of_recipes,
+            "recipe_number": no_of_recipes,
             "plans": no_of_plans,
             "newest_plan": newest_plan,
             "newest_recipe_plan_days": newest_recipe_plan_days,
