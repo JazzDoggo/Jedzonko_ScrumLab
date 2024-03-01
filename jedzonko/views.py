@@ -7,6 +7,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib import messages
 from django.urls import reverse
+
 from jedzonko.models import Recipe, Plan, RecipePlan, DayName, Page
 
 
@@ -148,6 +149,8 @@ class ModifyRecipe(View):
         edited_ingredients = request.POST.get('ingredients')
 
         return render(request, 'app-edit-recipe.html', {'recipe_with_id': recipe_with_id})
+
+
 class PlanListView(View):
     def get(self, request):
         plans = Plan.objects.all().order_by('name')
@@ -202,9 +205,13 @@ class PlanAddRecipeView(View):
         return redirect('plan-add-recipe')
 
 
-def contact_page(request):
-    try:
-        page = Page.objects.get(slug="contact")
-        return render(request, 'contact.html', {'page': page})
-    except Page.DoesNotExist:
-        return render(request, 'index.html')
+class AboutView(View):
+    def get(self, request):
+        try:
+            page_about = Page.objects.get(slug="about")
+            page_title = page_about.title
+            page_description = page_about.description
+            return render(request, "About.html", {"page_title": page_title,
+                                                  "page_description": page_description})
+        except:
+            return redirect('/#about')
