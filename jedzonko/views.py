@@ -86,7 +86,10 @@ class RecipeDetailView(View):
 
     def post(self, request, id):  # DODAWANIE LIKE/POST METHOD
         recipe_with_id = Recipe.objects.get(id=id)
-        recipe_with_id.votes += 1
+        if 'like' in request.POST:
+            recipe_with_id.votes += 1
+        elif 'dislike' in request.POST:
+            recipe_with_id.votes -= 1
         recipe_with_id.save()
         return redirect(reverse('recipe-id', kwargs={'id': id}))
 
