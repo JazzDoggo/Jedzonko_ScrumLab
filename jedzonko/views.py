@@ -167,8 +167,8 @@ class PlanAdd(View):
         return render(request, "app-add-schedules.html")
 
     def post(self, request):
-        name = request.POST.get("plan_name")
-        description = request.POST.get("plan_description")
+        name = request.POST.get("planName")
+        description = request.POST.get("planDescription")
         if name and description:
             new_plan = Plan.objects.create(name=name, description=description)
             return redirect(f"/plan/{new_plan.id}/")
